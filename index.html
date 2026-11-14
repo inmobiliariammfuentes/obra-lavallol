@@ -157,7 +157,7 @@ function render(){
   document.getElementById("tDeudaSub").textContent = `${fmt(dA,"ARS")} + ${fmt(dU,"USD")}`;
 
   const mg = D.deudas.find(x=>/miguel/i.test(x.n));
-  if(mg){ const acordado = mg.total + 10000, pagado = acordado - mg.saldo, pct = Math.max(0,Math.min(100,pagado/acordado*100));
+  if(mg){ const acordado = mg.total, pagado = mg.pag, pct = Math.max(0,Math.min(100,pagado/acordado*100));
     document.getElementById("tMiguel").textContent = Math.round(pct) + "% pagado";
     document.getElementById("tMiguelSub").textContent = `Faltan ${fmt(mg.saldo,"USD")} de ${fmt(acordado,"USD")}`;
     document.getElementById("tMiguelBar").style.width = pct + "%"; }
@@ -208,7 +208,7 @@ function drawCharts(){
     options:{ indexAxis:"y", maintainAspectRatio:false, plugins:{ legend:{display:false}, tooltip:{ callbacks:{ label:(c)=>` ${fmt(c.parsed.x,cur)} · ${pv[c.dataIndex].pagos} pagos` } } },
       scales:{ x:{ grid:{color:line}, ticks:{ callback:v=>short(v,cur) } }, y:{ grid:{display:false}, ticks:{ color:fg } } } } });
 
-  const mg = D.deudas.find(x=>/miguel/i.test(x.n)); const acordado = mg ? mg.total + 10000 : 48000;
+  const mg = D.deudas.find(x=>/miguel/i.test(x.n)); const acordado = mg ? mg.total : 48000;
   let a2 = 0; const mgl = D.miguel.map(x=>{ a2 += x.usd; return { x:fdate(x.f).replace(/ de (\d{4})$/,""), y:Math.round(a2), d:x.d }; });
   charts.g = new Chart(document.getElementById("cMiguel"), { type:"line",
     data:{ labels:mgl.map(p=>p.x), datasets:[
