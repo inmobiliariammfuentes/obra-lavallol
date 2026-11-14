@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Obra Lavallol 700</title>
+<meta name="description" content="Avance de gastos de la obra Felipe Lavallol 700, Haedo.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;800&family=Source+Sans+3:wght@400;600;700&display=swap">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+/* Layout: summary band of tiles, then a two-column grid of chart panels that stacks on phones */
+:root{
+  --bg:#f6f2f2; --surface:#ffffff; --fg:#26181b; --muted:#6e5a5e; --line:#e7dadc;
+  --accent:#7b1e2b; --accent-2:#b0485a; --soft:#f3e6e8; --good:#2f7d4f; --warn:#b5651d;
+  --display:"Archivo",system-ui,sans-serif; --body:"Source Sans 3",system-ui,sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#171012; --surface:#22191b; --fg:#f4eaec; --muted:#b8a2a6; --line:#3a2b2e;
+  --accent:#d0566a; --accent-2:#e88c9a; --soft:#2e2023; --good:#5cbf86; --warn:#e0a060; color-scheme:dark}}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.45;
+  padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+.wrap{max-width:1120px;margin:0 auto;padding-block:28px 48px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  display:flex;flex-direction:column;gap:24px}
+header{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px}
+.eyebrow{font-family:var(--display);font-weight:700;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+h1{font-family:var(--display);font-weight:800;font-size:clamp(28px,5vw,40px);line-height:1.05;margin:4px 0 0;text-wrap:balance}
+.meta{color:var(--muted);font-size:14px;margin-top:6px}
+.toggle{display:inline-flex;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:4px;gap:4px}
+.toggle button{font:600 14px var(--body);border:0;background:transparent;color:var(--muted);padding:8px 16px;border-radius:999px;cursor:pointer}
+.toggle button[aria-pressed="true"]{background:var(--accent);color:#fff}
+.toggle button:focus-visible{outline:3px solid var(--accent-2);outline-offset:2px}
+.tiles{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.tile{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 18px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.tile.hero{background:var(--accent);border-color:var(--accent);color:#fff}
+.tile.hero .lbl,.tile.hero .sub{color:rgba(255,255,255,.82)}
+.lbl{font-size:13px;color:var(--muted);font-weight:600;letter-spacing:.02em}
+.val{font-family:var(--display);font-weight:800;font-size:clamp(22px,3.2vw,30px);font-variant-numeric:tabular-nums;line-height:1.1;overflow-wrap:anywhere}
+.sub{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.bar{height:8px;border-radius:99px;background:var(--soft);overflow:hidden;margin-top:6px}
+.bar>i{display:block;height:100%;background:var(--accent);border-radius:99px}
+.tile.hero .bar{background:rgba(255,255,255,.25)}.tile.hero .bar>i{background:#fff}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.panel.wide{grid-column:1/-1}
+.panel h2{font-family:var(--display);font-weight:700;font-size:18px;margin:0}
+.panel .hint{font-size:13px;color:var(--muted);margin:-6px 0 0}
+.chart{position:relative;height:300px}
+.chart.tall{height:380px}
+table{width:100%;border-collapse:collapse;font-variant-numeric:tabular-nums}
+th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:middle}
+th{font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;font-weight:700}
+td.num,th.num{text-align:right}
+.tblwrap{overflow-x:auto}
+.debt-name{font-weight:700}
+.debt-sub{font-size:13px;color:var(--muted)}
+.pill{display:inline-block;font-size:12px;font-weight:700;padding:2px 8px;border-radius:99px;background:var(--soft);color:var(--accent)}
+.state{padding:40px 0;text-align:center;color:var(--muted)}
+footer{color:var(--muted);font-size:13px;text-align:center}
+@media (max-width:860px){.tiles{grid-template-columns:repeat(2,minmax(0,1fr))}.grid{grid-template-columns:1fr}.chart{height:260px}.chart.tall{height:420px}}
+@media (max-width:420px){.tiles{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div>
+      <div class="eyebrow">Felipe Lavallol 700 · Haedo</div>
+      <h1>Costos de la obra</h1>
+      <div class="meta" id="meta">Cargando datos…</div>
+    </div>
+    <div class="toggle" role="group" aria-label="Moneda">
+      <button id="bARS" aria-pressed="true">Pesos</button>
+      <button id="bUSD" aria-pressed="false">Dólares</button>
+    </div>
+  </header>
+
+  <section class="tiles" aria-label="Resumen">
+    <div class="tile hero"><span class="lbl">Total gastado</span><span class="val" id="tTotal">—</span><span class="sub" id="tTotalSub">&nbsp;</span></div>
+    <div class="tile"><span class="lbl">Deuda pendiente</span><span class="val" id="tDeuda">—</span><span class="sub" id="tDeudaSub">&nbsp;</span></div>
+    <div class="tile"><span class="lbl">Mano de obra Miguel</span><span class="val" id="tMiguel">—</span><span class="sub" id="tMiguelSub">&nbsp;</span><div class="bar"><i id="tMiguelBar" style="width:0"></i></div></div>
+    <div class="tile"><span class="lbl">Semanas de obra pagadas</span><span class="val" id="tSemanas">—</span><span class="sub" id="tSemanasSub">&nbsp;</span></div>
+  </section>
+
+  <section class="grid">
+    <div class="panel"><h2>Gastos por rubro</h2><p class="hint">Tocá un rubro para ver su monto.</p><div class="chart"><canvas id="cRubro" aria-label="Gráfico de gastos por rubro"></canvas></div></div>
+    <div class="panel"><h2>Deudas pendientes</h2><p class="hint">Cuánto se pagó de cada compromiso y cuánto falta.</p><div class="tblwrap"><table id="tblDeudas"><thead><tr><th>Acreedor</th><th class="num">Pagado</th><th class="num">Falta</th></tr></thead><tbody></tbody></table></div></div>
+    <div class="panel wide"><h2>Gasto por mes</h2><p class="hint">Barras: gasto del mes. Línea: total acumulado.</p><div class="chart"><canvas id="cMes" aria-label="Gráfico de gasto mensual"></canvas></div></div>
+    <div class="panel"><h2>Por proveedor</h2><div class="chart tall"><canvas id="cProv" aria-label="Gráfico de gasto por proveedor"></canvas></div></div>
+    <div class="panel"><h2>Pagos a Miguel</h2><p class="hint">Acumulado en dólares frente al total acordado.</p><div class="chart tall"><canvas id="cMiguel" aria-label="Gráfico de pagos acumulados a Miguel"></canvas></div></div>
+  </section>
+
+  <footer>Los datos se actualizan solos desde la planilla de la obra. <span id="foot"></span></footer>
+</div>
+
+<script>
+const CSV_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vT8T3cQUHsVyn0aybiRQlp3MLWM2c7yPIEHB-N7mCFpWaeugsmPTNmQ8_OgJTqISnWXc-I5NEilYlEW/pub?gid=1102007112&single=true&output=csv";
+const MESES = ["ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic"];
+let D = null, cur = "ARS", charts = {};
+try { cur = localStorage.getItem("lav_cur") || "ARS"; } catch(e) {}
+
+function parseCSV(t){
+  const rows=[]; let row=[], f="", q=false;
+  for(let i=0;i<t.length;i++){const c=t[i];
+    if(q){ if(c=='"'){ if(t[i+1]=='"'){f+='"';i++;} else q=false; } else f+=c; }
+    else if(c=='"') q=true; else if(c==','){row.push(f);f="";}
+    else if(c=='\n'){row.push(f);rows.push(row);row=[];f="";} else if(c!='\r') f+=c;}
+  if(f||row.length){row.push(f);rows.push(row);} return rows;
+}
+const num = v => { const n = parseFloat(String(v||"").replace(/[^0-9.\-]/g,"")); return isNaN(n)?0:n; };
+function block(rows, c0, n){ const out=[]; for(let r=1;r<rows.length;r++){ const s=rows[r].slice(c0,c0+n); if(!s[0]) continue; out.push(s);} return out; }
+
+function load(){
+  fetch(CSV_URL + "&t=" + Date.now()).then(r=>{ if(!r.ok) throw new Error(r.status); return r.text(); }).then(t=>{
+    const R = parseCSV(t);
+    const kv = {}; block(R,0,2).forEach(([k,v])=>kv[k]=v);
+    D = {
+      kv,
+      rubros: block(R,3,3).map(([n,a,u])=>({n,ars:num(a),usd:num(u)})).filter(x=>x.ars>0),
+      prov: block(R,7,4).map(([n,a,u,p])=>({n,ars:num(a),usd:num(u),pagos:num(p)})),
+      mes: block(R,12,4).map(([y,m,a,u])=>({y:num(y),m:num(m),ars:num(a),usd:num(u)})),
+      deudas: block(R,17,6).map(([n,c,mo,t,p,s])=>({n,c,mo,total:num(t),pag:num(p),saldo:num(s)})),
+      miguel: block(R,24,3).map(([f,d,u])=>({f,d,usd:num(u)}))
+    };
+    render();
+  }).catch(err=>{
+    document.getElementById("meta").textContent = "No se pudieron cargar los datos. Probá recargar la página en unos minutos.";
+  });
+}
+
+const fmt = (v, c) => c==="USD" ? "US$ " + Math.round(v).toLocaleString("es-AR") : "$ " + Math.round(v).toLocaleString("es-AR");
+const short = (v, c) => { const p = c==="USD" ? "US$ " : "$ "; const a=Math.abs(v);
+  if(a>=1e6) return p + (v/1e6).toLocaleString("es-AR",{maximumFractionDigits:1}) + " M";
+  if(a>=1e3) return p + (v/1e3).toLocaleString("es-AR",{maximumFractionDigits:0}) + " mil";
+  return p + Math.round(v); };
+const fdate = s => { const [y,m,d]=String(s).split("-"); return d && m ? `${+d} de ${MESES[+m-1]} de ${y}` : s; };
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+
+function render(){
+  if(!D) return;
+  const k = D.kv, rate = num(k.dolar_ref)||1;
+  const totA = num(k.total_ars), totU = num(k.total_usd);
+  document.getElementById("meta").textContent = `${k.cantidad} gastos cargados · último el ${fdate(k.ultimo_gasto)}`;
+  document.getElementById("foot").textContent = `Datos al ${k.actualizado}. Dólar de referencia: $ ${num(k.dolar_ref).toLocaleString("es-AR")}.`;
+
+  document.getElementById("tTotal").textContent = cur==="USD" ? fmt(totU,"USD") : fmt(totA,"ARS");
+  document.getElementById("tTotalSub").textContent = cur==="USD" ? "≈ " + fmt(totA,"ARS") : "≈ " + fmt(totU,"USD");
+
+  const dA = num(k.deuda_ars), dU = num(k.deuda_usd);
+  const deudaTot = cur==="USD" ? dU + dA/rate : dA + dU*rate;
+  document.getElementById("tDeuda").textContent = fmt(deudaTot, cur);
+  document.getElementById("tDeudaSub").textContent = `${fmt(dA,"ARS")} + ${fmt(dU,"USD")}`;
+
+  const mg = D.deudas.find(x=>/miguel/i.test(x.n));
+  if(mg){ const acordado = mg.total + 10000, pagado = acordado - mg.saldo, pct = Math.max(0,Math.min(100,pagado/acordado*100));
+    document.getElementById("tMiguel").textContent = Math.round(pct) + "% pagado";
+    document.getElementById("tMiguelSub").textContent = `Faltan ${fmt(mg.saldo,"USD")} de ${fmt(acordado,"USD")}`;
+    document.getElementById("tMiguelBar").style.width = pct + "%"; }
+  document.getElementById("tSemanas").textContent = k.semanas_miguel;
+  const sem = D.miguel.filter(x=>/^semana/i.test(x.d));
+  if(sem.length){ const avg = sem.reduce((s,x)=>s+x.usd,0)/sem.length; document.getElementById("tSemanasSub").textContent = `Promedio ${fmt(avg*(cur==="USD"?1:rate),cur)} por semana`; }
+
+  // Deudas
+  const tb = document.querySelector("#tblDeudas tbody"); tb.innerHTML = "";
+  D.deudas.forEach(x=>{ const pct = x.total ? Math.min(100, x.pag/x.total*100) : 0; const c = x.mo==="USD"?"USD":"ARS";
+    const tr = document.createElement("tr");
+    tr.innerHTML = `<td><div class="debt-name"></div><div class="debt-sub"></div><div class="bar"><i style="width:${pct}%"></i></div></td><td class="num">${fmt(x.pag,c)}</td><td class="num"><b>${fmt(x.saldo,c)}</b></td>`;
+    tr.querySelector(".debt-name").textContent = x.n; tr.querySelector(".debt-sub").textContent = x.c;
+    tb.appendChild(tr); });
+
+  drawCharts();
+}
+
+function drawCharts(){
+  const key = cur==="USD"?"usd":"ars";
+  const fg = css("--fg"), muted = css("--muted"), line = css("--line"), acc = css("--accent"), acc2 = css("--accent-2");
+  Chart.defaults.font.family = '"Source Sans 3", system-ui, sans-serif'; Chart.defaults.color = muted;
+  const pal = ["#7b1e2b","#b0485a","#d98a96","#5b4a4d","#a1887f","#c9a227","#6d8b74","#8c6d8c"];
+  Object.values(charts).forEach(c=>c.destroy()); charts = {};
+  const tip = { callbacks:{ label:(ctx)=> " " + fmt(ctx.parsed.y ?? ctx.parsed.x ?? ctx.parsed, cur) } };
+
+  const rub = [...D.rubros].sort((a,b)=>b[key]-a[key]); const totR = rub.reduce((s,x)=>s+x[key],0);
+  charts.r = new Chart(document.getElementById("cRubro"), { type:"doughnut",
+    data:{ labels:rub.map(x=>x.n), datasets:[{ data:rub.map(x=>x[key]), backgroundColor:pal, borderColor:css("--surface"), borderWidth:2 }]},
+    options:{ maintainAspectRatio:false, cutout:"58%", plugins:{ legend:{ position:"right", labels:{ color:fg, boxWidth:12, padding:10,
+      generateLabels:(ch)=>ch.data.labels.map((l,i)=>({ text:`${l}  ${Math.round(rub[i][key]/totR*100)}%`, fillStyle:pal[i%pal.length], strokeStyle:pal[i%pal.length], index:i, fontColor:fg })) } },
+      tooltip:{ callbacks:{ label:(ctx)=>` ${fmt(ctx.parsed,cur)} (${Math.round(ctx.parsed/totR*100)}%)` } } } } });
+  if (window.innerWidth < 520) charts.r.options.plugins.legend.position = "bottom", charts.r.update();
+
+  let acum = 0; const mesLbl = D.mes.map(x=>`${MESES[x.m-1]} ${String(x.y).slice(2)}`); const mesV = D.mes.map(x=>x[key]); const mesA = mesV.map(v=>acum+=v);
+  charts.m = new Chart(document.getElementById("cMes"), {
+    data:{ labels:mesLbl, datasets:[
+      { type:"bar", label:"Gasto del mes", data:mesV, backgroundColor:acc, borderRadius:6, yAxisID:"y", order:2 },
+      { type:"line", label:"Acumulado", data:mesA, borderColor:acc2, backgroundColor:acc2, tension:.3, pointRadius:3, yAxisID:"y2", order:1 } ]},
+    options:{ maintainAspectRatio:false, interaction:{mode:"index",intersect:false},
+      plugins:{ legend:{ labels:{ color:fg, boxWidth:12 } }, tooltip:{ callbacks:{ label:(c)=>` ${c.dataset.label}: ${fmt(c.parsed.y,cur)}` } } },
+      scales:{ x:{ grid:{display:false} }, y:{ grid:{color:line}, ticks:{ callback:v=>short(v,cur) } },
+        y2:{ position:"right", grid:{display:false}, ticks:{ callback:v=>short(v,cur) } } } } });
+
+  const pv = [...D.prov].sort((a,b)=>b[key]-a[key]);
+  charts.p = new Chart(document.getElementById("cProv"), { type:"bar",
+    data:{ labels:pv.map(x=>x.n), datasets:[{ data:pv.map(x=>x[key]), backgroundColor:acc, borderRadius:5 }]},
+    options:{ indexAxis:"y", maintainAspectRatio:false, plugins:{ legend:{display:false}, tooltip:{ callbacks:{ label:(c)=>` ${fmt(c.parsed.x,cur)} · ${pv[c.dataIndex].pagos} pagos` } } },
+      scales:{ x:{ grid:{color:line}, ticks:{ callback:v=>short(v,cur) } }, y:{ grid:{display:false}, ticks:{ color:fg } } } } });
+
+  const mg = D.deudas.find(x=>/miguel/i.test(x.n)); const acordado = mg ? mg.total + 10000 : 48000;
+  let a2 = 0; const mgl = D.miguel.map(x=>{ a2 += x.usd; return { x:fdate(x.f).replace(/ de (\d{4})$/,""), y:Math.round(a2), d:x.d }; });
+  charts.g = new Chart(document.getElementById("cMiguel"), { type:"line",
+    data:{ labels:mgl.map(p=>p.x), datasets:[
+      { label:"Pagado acumulado", data:mgl.map(p=>p.y), borderColor:acc, backgroundColor:acc+"22", fill:true, tension:.25, pointRadius:2 },
+      { label:"Total acordado", data:mgl.map(()=>acordado), borderColor:muted, borderDash:[6,5], pointRadius:0, fill:false } ]},
+    options:{ maintainAspectRatio:false, interaction:{mode:"index",intersect:false},
+      plugins:{ legend:{ labels:{ color:fg, boxWidth:12 } }, tooltip:{ callbacks:{ title:(it)=>`${mgl[it[0].dataIndex].x} · ${mgl[it[0].dataIndex].d}`, label:(c)=>` ${c.dataset.label}: ${fmt(c.parsed.y,"USD")}` } } },
+      scales:{ x:{ grid:{display:false}, ticks:{ maxTicksLimit:8 } }, y:{ grid:{color:line}, beginAtZero:true, ticks:{ callback:v=>short(v,"USD") } } } } });
+}
+
+function setCur(c){ cur=c; try{localStorage.setItem("lav_cur",c);}catch(e){}
+  document.getElementById("bARS").setAttribute("aria-pressed", c==="ARS"); document.getElementById("bUSD").setAttribute("aria-pressed", c==="USD"); render(); }
+document.getElementById("bARS").onclick = ()=>setCur("ARS");
+document.getElementById("bUSD").onclick = ()=>setCur("USD");
+setCur(cur); load();
+setInterval(load, 5*60*1000);
+</script>
+</body>
+</html>
