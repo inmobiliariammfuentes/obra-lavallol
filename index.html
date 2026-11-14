@@ -30,6 +30,8 @@ header{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-be
 .eyebrow{font-family:var(--display);font-weight:700;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
 h1{font-family:var(--display);font-weight:800;font-size:clamp(28px,5vw,40px);line-height:1.05;margin:4px 0 0;text-wrap:balance}
 .meta{color:var(--muted);font-size:14px;margin-top:6px}
+.cta{display:inline-block;margin-top:10px;font:700 14px var(--body);color:var(--accent);text-decoration:none;border:1px solid var(--accent);border-radius:999px;padding:6px 14px}
+.cta:focus-visible{outline:3px solid var(--accent-2);outline-offset:2px}
 .toggle{display:inline-flex;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:4px;gap:4px}
 .toggle button{font:600 14px var(--body);border:0;background:transparent;color:var(--muted);padding:8px 16px;border-radius:999px;cursor:pointer}
 .toggle button[aria-pressed="true"]{background:var(--accent);color:#fff}
@@ -73,6 +75,7 @@ footer{color:var(--muted);font-size:13px;text-align:center}
       <div class="eyebrow">Felipe Lavallol 700 · Haedo</div>
       <h1>Costos de la obra</h1>
       <div class="meta" id="meta">Cargando datos…</div>
+      <a class="cta" href="cargar.html">+ Cargar un gasto</a>
     </div>
     <div class="toggle" role="group" aria-label="Moneda">
       <button id="bARS" aria-pressed="true">Pesos</button>
